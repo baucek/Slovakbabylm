@@ -1,0 +1,33 @@
+import json
+import time 
+import boto3 
+import logging
+import botocore
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+list_url=['https://www.opensubtitles.org/sk/search/sublanguageid-slo/movieyearsign-1/movieyear-2024/offset-']
+def lambda_handler(event, context):
+    
+    config = botocore.config.Config(
+    read_timeout=105,
+    connect_timeout=105,
+    retries={"max_attempts": 0}
+    )
+    all_responses = []
+    for page in list_url:
+        for i in range(0,240,20):
+            print(i)
+            print(i+20)
+            client = boto3.client('lambda',config=config)
+            response = client.invoke(
+                FunctionName='Scraper',
+                InvocationType='RequestResponse',
+                Payload=json.dumps({'page': page,'number1': i, 'number2': i+20,'number':0,'loop':0})
+                )
+            response_payload = json.loads(response['Payload'].read())
+            print(response_payload)
+            all_responses.append(response_payload)
+        return {'lol':i,
+                'lol2':all_responses
+        }

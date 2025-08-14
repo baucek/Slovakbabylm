@@ -1,0 +1,82 @@
+import urllib.request
+import json
+import sys
+import time
+sys.path.append('/opt/site-packages')
+import requests
+from zipfile import ZipFile
+import io
+from bs4 import BeautifulSoup
+import boto3
+import srt
+import logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+
+
+
+def lambda_handler(event, context):
+    client= boto3.client('lambda')
+    s3 = boto3.client('s3')
+    number=event['number']
+    start=event['number1']
+    stop=event['number2']
+    page=event['page']
+
+    url = f'{page}{start}'
+    response = client.update_function_code(
+                        FunctionName='arn:aws:lambda:us-east-1:589416450922:function:Scraper', #AWS_LAMBDA_NAME_INSTANCE
+                        S3Bucket='awsbucketscraper', {S3 bucket name}
+                        S3Key='test_function.zip',   {Folder where in s3 bucket couded}
+                        Publish=True)
+
+    while number+start<=stop:
+            response = requests.get(url)
+            content =BeautifulSoup(response.text,"html.parser")
+            info = content.find_all("a", {"class": "bnone"})
+            for link in info:
+                href = 'https://www.opensubtitles.org/'+link.get("href")
+                response = requests.get(href)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                info = soup.find("a", title='Stiahnuť')
+                try:
+                    download_url = info.get('href')
+                except:
+                    number+=1
+                    break
+                file_name = download_url.split('/')[-1]
+                response = requests.get(download_url)
+                if response.status_code == 200:
+                    with ZipFile(io.BytesIO(response.content)) as the_zip:
+                        for contained_file in the_zip.namelist():
+                                if contained_file.endswith('.srt') or contained_file.endswith('.sub') :
+                                    with the_zip.open(contained_file) as subtitle_file:
+                                        raw_content = subtitle_file.read()
+                                        try:
+                                            subtitles = raw_content.decode('windows-1250')
+                                        except:
+                                            try:
+                                                subtitles = raw_content.decode('utf-8') #
+                                            except:
+                                                subtitles = raw_content.decode('latin-1')
+                                        if subtitles.startswith('\ufeff'):
+                                            subtitles = subtitles[1:]
+                                        try:
+                                            parsed_subtitles = list(srt.parse(subtitles))
+                                            text_content = "\n".join(subtitle.content for subtitle in parsed_subtitles)
+                                            s3.put_object(Bucket='awsbucketscraper', Key=f'{file_name}-{contained_file}-{start+number}.txt', Body=text_content)
+                                            number+=1
+                                            if number>=20:
+                                                return {
+                                                    'statusCode': response.status_code,
+                                                    'body': json.dumps({'message': f'process {start},{stop},{number}'})
+                                                    }
+                                        except:
+                                                number+=1
+                                                break
+                else:
+                    return {
+                        'statusCode': response.status_code,
+                        'body': json.dumps({'message': f'not process {start},{stop},{number}'})
+                        }
