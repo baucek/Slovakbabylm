@@ -1,35 +1,31 @@
+# Slovakbabylm
+
 In folders you can find specific .py or .ipynb files which were used for SlovakBabyLM. 
 Whole slovakbabylm dataset can be found on https://huggingface.co/datasets/ubokri/SlovakBabyLM
 
-#### Repository Structure ####
-## Experiments ## 
+# Repository Structure
+## Experiments 
 This folder contain .ipynb files which was used for application metrics and get results from them.
 Python version: 3.8.10
 
-Files
-Creating_text.ipynb-  Create text based on certain requirements, specific order or randomly also counter to compute how many data are inside of files
-Order_text.ipynb-     Train tokenizer for specific text, evaluate specific text and create order (by subdataset or as a whole json) results are json files and order of files
-Comp_masking.ipynb-   Put created ordered json into text file and for 3 experiment create text with masks based on condition.
-Creating_model.ipynb- Create models based on created text with or without specific masking also compute how many masks create DataCollatorForLanguageModeling class
-sa.ipynb & qa.ipynb-  Sentiment analysis and question anwering
-Visualization.ipynb-  Code for tables which are in diploma thesis. 
+Files:
+- `Creating_text.ipynb`-  Create text based on certain requirements, specific order or randomly also counter to compute how many data are inside of files
+- `Order_text.ipynb`-     Train tokenizer for specific text, evaluate specific text and create order (by subdataset or as a whole json) results are json files and order of files
+- `Comp_masking.ipynb`-   Put created ordered json into text file and for 3 experiment create text with masks based on condition.
+- `Creating_model.ipynb`- Create models based on created text with or without specific masking also compute how many masks create DataCollatorForLanguageModeling class
+- `sa.ipynb` & `qa.ipynb`-  Sentiment analysis and question anwering
+- `Visualization.ipynb`-  Code for tables which are in diploma thesis. 
 
 
 In each notebook you need to set name of folder or list of folders in specific order depence on what do you want.
 Requirements are in folder
 You run gradually each cell.
 
-Folders
-data: in data folder you have 6 empty folders where you need to download sub-datasets from https://huggingface.co/datasets/ubokri/SlovakBabyLM
-tok_bpe: Tokenizer for each text
-saved_models: All files for running a model
-results_evaluation: Results of QA and SA
-
-3 group of folders: strict_model, strict_model_most_complex, strict_model_simpliest_results
-In strict_model and strict_model_full_json are sub-datasets in json format ordered by our conditions and used for 1. and 2. experiments 
-For 3. experiment are folders strict_model_most_complex and strict_model_simpliest
-To each folder exist ..._results where are created text files for pretraining of models.
-
+Empty folders for results:
+- `data`: in data folder you have 6 empty folders where you need to download sub-datasets from https://huggingface.co/datasets/ubokri/SlovakBabyLM
+- `tok_bpe`: Tokenizer for each text
+- `saved_models`: All files for running a model
+- `results_evaluation`: Results of QA and SA
 
 
 ## Other folders ##
