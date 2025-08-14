@@ -29,7 +29,7 @@ Empty folders for results:
 
 
 ## Data mining and Preprocessing
-If file for crawling is not folder you can find it in Crawling-scrapy\spiders-scr\spiders
+If file for crawling is not folder you can find it in `Crawling-scrapy\spiders-scr\spiders`
 Python version: 3.11.7 
 In folder subtitles are two text files which are code in AWS lambdas, which you need to create and also create AWS S3 instance where you save code and python enviroment with libraries
 neccessery to run code (.zip)
