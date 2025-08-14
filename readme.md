@@ -28,8 +28,7 @@ Empty folders for results:
 - `results_evaluation`: Results of QA and SA
 
 
-## Other folders ##
-All files neccessery to scraped and preproccessed data.
+## Data mining and Preprocessing
 If file for crawling is not folder you can find it in Crawling-scrapy\spiders-scr\spiders
 Python version: 3.11.7 
 In folder subtitles are two text files which are code in AWS lambdas, which you need to create and also create AWS S3 instance where you save code and python enviroment with libraries
@@ -37,11 +36,11 @@ neccessery to run code (.zip)
 For save result you need to change path for each file
 
 
-## Crawling spider ## 
+### Crawling spider  
 This folder contain enviroment neccessery to run scrapy. 
 All spiders are in Crawling-scrapy\spiders-scr\spiders
-You run spider from CMD: cd Crawling-scrapy\spiders-scr
-			 scrapy crawl {name of spider} -o outfile.json
+You run spider from CMD: `cd Crawling-scrapy\spiders-scr` 
+`scrapy crawl {name of spider} -o outfile.json`
 
 
 
